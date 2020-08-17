@@ -6,6 +6,11 @@
   const btn = document.getElementById('btn')
   const result = document.getElementById('result')
   const scoreLabel = document.querySelector('#result > p')
+  const timer = document.getElementById('timer');
+  const btn1 = document.getElementById('btn1');
+
+  let startTime;
+  let timeoutId;
 
   const quizSet = shuffle([
     { q: '世界で一番大きな湖は?', c: ['カスピ海', 'カリブ海', '琵琶湖'] },
@@ -70,10 +75,31 @@
     if (currentNum === quizSet.length - 1) {
       console.log(`Score:${score}/${quizSet.length}`);
       scoreLabel.textContent = `Score:${score}/${quizSet.length}`;
+      clearTimeout(timeoutId);
       result.classList.remove('hidden');
     } else {
       currentNum++;
       setQuiz();
     }
+
+    
+  });
+
+  function countUp() {
+    console.log(Date.now() - startTime);
+    const d = new Date(Date.now() - startTime);
+    const m = String(d.getMinutes()).padStart(2, '0');
+    const s = String(d.getSeconds()).padStart(2, '0');
+    const ms = String(d.getMilliseconds()).padStart(3, '0');
+    timer.textContent = `${m}:${s}.${ms}`;
+
+    timeoutId = setTimeout(() => {
+      countUp();
+    }, 10);
+  }
+
+  btn1.addEventListener('click', () => {
+    startTime = Date.now();
+    countUp();
   });
 }
